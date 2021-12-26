@@ -1,34 +1,34 @@
 import React from 'react'
-import { View, Text,StyleSheet,Image } from 'react-native'
+import { View, Text,Image,ScrollView } from 'react-native'
 const Details = ({route}) => {
-    const{address,country,gender,image,hobbies,location,name}=route.params.data
+    const{address,country,gender,image,hobbies,location,name,signature}=route.params.data
 
     return (
-        <View style ={styles.container}>
-            <Text>Name: {name}</Text>
-            <Image source={{uri:image}} style={{height:80,width:100,resizeMode:'contain',marginLeft:20}} />
-            <Text>Address: {address}</Text>
-            <Text>Country: {country}</Text>
-            <Text>Gender: {gender}</Text>
-            <Text>Location:  </Text>
-            <Text>latitude: {location[0].latitude}</Text>
-            <Text>longitude:{location[0].longitude}</Text>
-            <Text>speed:    {location[0].speed}</Text>
-            <Text>altitude: {location[0].altitude}</Text>
+        <ScrollView style ={{marginLeft:10}}>
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'700',margin:10}}>Name: {name}</Text>
+            <Text  style ={{fontSize:30,fontWeight:'bold',fontWeight:'700',margin:10,alignSelf:'center'}}>Image</Text>
+            <Image source={{uri:image}} style={{height:200,width:200,alignSelf:'center',borderRadius:10}} />
+            <Text  style ={{fontSize:30,fontWeight:'bold',fontWeight:'700',margin:10,alignSelf:'center'}}>Signature</Text>
+            <Image source={{uri:signature}} style={{height:200,width:200,alignSelf:'center',borderRadius:10}} />
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'700',margin:10}}>Address: {address}</Text>
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'700',margin:10}}>Country: {country}</Text>
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'700',margin:10}}>Gender: {gender}</Text>
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'700',margin:10}}>Location:  </Text>
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'300',margin:10,marginLeft:20}}>- latitude: {location[0].latitude}</Text>
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'300',margin:10,marginLeft:20}}>- longitude:{location[0].longitude}</Text>
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'300',margin:10,marginLeft:20}}>- speed:    {location[0].speed}</Text>
+            <Text style ={{fontSize:24,fontWeight:'bold',fontWeight:'300',margin:10,marginLeft:20}}>- altitude: {location[0].altitude}</Text>
 
-            <Text>Hobbies:</Text>
+            <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'700',margin:10}}>Hobbies:</Text>
 
             {
                 hobbies.map((sorce,key)=>(
-                    <Text key={key}>{sorce}</Text>
+                    <Text style ={{fontSize:30,fontWeight:'bold',fontWeight:'500',marginLeft:20}}key={key}>- {sorce}</Text>
                 ))
             }
 
-        </View>
+        </ScrollView>
     )
 }
-const styles = StyleSheet.create({
-    container:{
-    }
-})
+
 export default Details

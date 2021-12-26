@@ -1,6 +1,7 @@
 import Form from './source/screens/form';
 import Home from './source/screens/Home';
 import Details from './source/screens/Details';
+import EditForm from './source/EditForm'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
@@ -14,7 +15,7 @@ export default function App() {
   <Stack.Navigator>
   <Stack.Screen name="Main" component={Home} options ={{headerShown:false}}  options={{ headerShown:false   }}/>
   <Stack.Screen name="Details" component={Details} />
-
+  <Stack.Screen name="Edit Form" component={EditForm} />
   </Stack.Navigator>
 
   return (

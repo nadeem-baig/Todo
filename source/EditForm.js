@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef } from 'react';
-import { Button, TextInput, View ,StyleSheet ,Picker,Text,ScrollView,Pressable,  FlatList,Platform,TouchableOpacity,Image,Alert,Modal } from 'react-native';
+import { Button, TextInput, View ,StyleSheet ,Picker,Text,ScrollView,FlatList,Platform,TouchableOpacity,Image,Alert,Modal,Pressable } from 'react-native';
 import { Formik } from 'formik';
 import Checkbox from 'expo-checkbox';
 import { RadioButton  } from 'react-native-paper';
@@ -10,11 +10,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
 import Signature from "react-native-signature-canvas";
-
+ 
 const imageSizes = [ {id:1,key:'Cricket',checked:false},{id:2,key:'Hockey',checked:false},{id:3,key:'Football',checked:false},{id:4,key:'Soccer',checked:false},{id:5,key:'Singing',checked:false},{id:6,key:'Dancing',checked:false}];
 
 
-const form = () => {
+const EditForm = ({route}) => {
+const Editdata=JSON.parse(route.params.data)
   const [Hobbies, setHobbies] = useState(imageSizes);
   const selectedHobbies=[]
   const [location, setLocation] = useState(null);
@@ -22,13 +23,18 @@ const form = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const[Show,setShow]=useState(false)
-  const[image,setImage]=useState([])
-  const[ShowPreview,setShowPreview]=useState(false)
-  const [signature, setSign] = useState(null);
-  const ref = useRef(null)
+  const[image,setImage]=useState(Editdata.image)
+  const[ShowPreview,setShowPreview]=useState(true)
+  const[FormData,setFormData]=useState([])
   const [modalVisible, setModalVisible] = useState(false);
+  const [signature, setSign] = useState(Editdata.signature);
 
-  useEffect(() => {
+  const ref = useRef(null)
+
+
+
+  useEffect(
+      () => {
     (async () => {
       if (Platform.OS === 'android' && !Constants.isDevice) {
         setErrorMsg(
@@ -131,7 +137,7 @@ const storeData = async (value) => {
   const data = JSON.stringify(result)
   try {
     const jsonValue = JSON.stringify(value)
-    await AsyncStorage.setItem(  Date.now().toString(), jsonValue)
+    await AsyncStorage.setItem(route.params.address, jsonValue)
     console.log(' saved');
 
   } catch (e) {
@@ -148,8 +154,6 @@ const getData = async () => {
   }
 }
 
-
-
 const handleOK = (signature) => {
   setSign(signature);
 };
@@ -163,6 +167,7 @@ const style = `.m-signature-pad--footer
     background-color: red;
     color: #FFF;
   }`;
+
 
   return(    
     
@@ -196,36 +201,36 @@ const style = `.m-signature-pad--footer
     <View style={styles.container}>
   </View>
       <Formik
-    initialValues={{ name: '',address: '',gender: '',country:'',hobbies:[],location:[],image:'',signature:'' }}
+    initialValues={{ name: Editdata.name,address: Editdata.address,gender: Editdata.gender ,country:Editdata.country,hobbies:Editdata.hobbies,location:Editdata.location,image:Editdata.image}}
     onSubmit={(values =>{
-      Hobbies.filter(word => word.checked==true ? selectedHobbies.push(word.key):null),
-      selectedHobbies.forEach(element => values.hobbies.push(element)),
-      values.location.push(location['coords']),
-      values.image=image
-      values.signature=signature
+        Hobbies.filter(word => word.checked==true ? selectedHobbies.push(word.key):null),
+        selectedHobbies.forEach(element => values.hobbies.push(element)),
+        values.location.push(location['coords']),
+        values.image=image  
+        values.signature=signature
 
-      if (values.name!=='' && values.address!='' &&values.gender!=''&&values.hobbies!=[] && values.country!=''&& values.image!='' && values.location!=[] && values.signature!='') {
-        storeData(values),
-        Alert.alert(
-          "Success",
-          "Your Data has been successfully saved",
-          [
-            { text: "OK"}
-          ]
-        )
-      } else {
-        Alert.alert(
-          "Chech",
-          "Please enter all values or Check For Permissions",
-          [
-            { text: "OK"}
-          ]
-        )
-      }
-
-    } 
-      )}
-  >
+        if (values.name!=='' && values.address!='' &&values.gender!=''&&values.hobbies!=[] && values.country!=''&& values.image!='' && values.location!=[] && values.signature!='') {
+          storeData(values),
+          Alert.alert(
+            "Success",
+            "Your Data has been successfully saved",
+            [
+              { text: "OK"}
+            ]
+          )
+        } else {
+          Alert.alert(
+            "Chech",
+            "Please enter all values or Check For Permissions",
+            [
+              { text: "OK"}
+            ]
+          )
+        }
+  
+      } 
+        )}
+    >
     {({ handleChange, handleBlur, handleSubmit, values }) => (
       <View>
         <Text>Name</Text>
@@ -235,7 +240,8 @@ const style = `.m-signature-pad--footer
           value={values.name}
           placeholder="Name"
           style={styles.input}    
-          
+          placeholder={Editdata.name}
+
           />
 
         <Text>Address</Text>
@@ -249,11 +255,13 @@ const style = `.m-signature-pad--footer
         onChangeText={handleChange('address')}
         onBlur={handleBlur('address')}
         value={values.address}
+        placeholder={Editdata.address}
+
         />
 
         <View>
         <Text>Gender</Text>
-        <RadioButton.Group onValueChange={handleChange('gender')} value={values.gender}         onBlur={handleBlur('gender')}>
+        <RadioButton.Group onValueChange={handleChange('gender')} value={values.gender}   placeholder={Editdata.gender}       onBlur={handleBlur('gender')}>
             <RadioButton.Item label="Male" value="Male" />
             <RadioButton.Item label="Feamale" value="Feamale" />
             <RadioButton.Item label="Others" value="Others" />
@@ -271,6 +279,7 @@ const style = `.m-signature-pad--footer
         style={{ height: 50, width: 300, marginLeft:20,backgroundColor:"red" }}
         onValueChange={handleChange('country')}
         onBlur={handleBlur('country')}
+        value={Editdata.country}
 
       >
         <Picker.Item label="Select a country" value="#" />
@@ -281,7 +290,7 @@ const style = `.m-signature-pad--footer
         <Picker.Item label="Canada" value="canada" />
         <Picker.Item label="Turkey" value="turkey" />
       </Picker>
-      <Modal
+ <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -335,7 +344,7 @@ const style = `.m-signature-pad--footer
       </Pressable>
 
         <View style={{margin:20}}>
-        <Button onPress={handleSubmit} title="Submit" color={'#841584'} />
+        <Button onPress={handleSubmit} title="Submit" />
         </View>
       </View>
     )}
@@ -349,8 +358,7 @@ const style = `.m-signature-pad--footer
     const styles = StyleSheet.create({
   container: {
     marginLeft:10,
-    marginRight:10,
-    flex:1
+    marginRight:10
   },
   input:{
     borderWidth: 1,
@@ -360,6 +368,7 @@ const style = `.m-signature-pad--footer
     marginBottom:10,
     padding:10
   },
+
   preview: {
     width: 335,
     height: 114,
@@ -424,4 +433,4 @@ marginBottom:20
     textAlign: "center"
   }
 });
-export default form
+export default EditForm
