@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
 import Signature from "react-native-signature-canvas";
+import { Ionicons } from '@expo/vector-icons';
 
 const imageSizes = [ {id:1,key:'Cricket',checked:false},{id:2,key:'Hockey',checked:false},{id:3,key:'Football',checked:false},{id:4,key:'Soccer',checked:false},{id:5,key:'Singing',checked:false},{id:6,key:'Dancing',checked:false}];
 
@@ -67,7 +68,7 @@ const takePictures = async ()=>{
 
   }
 }
-
+ 
 const handleSave = async (photo) => {
   const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY );
   if (status === "granted") {
@@ -148,8 +149,6 @@ const getData = async () => {
   }
 }
 
-
-
 const handleOK = (signature) => {
   setSign(signature);
 };
@@ -189,6 +188,7 @@ const style = `.m-signature-pad--footer
 
 { Show &&   <View style={{marginTop:10}}>
    <Button  onPress={()=>takePictures()}  title="Take Picture" color="#841584"/></View>}
+
 <View style={{margin:10}}> 
     <Button  onPress={()=>setShow(!Show)}  title={Show ?'Hide':'Take picture'} color="#841584"/></View>
 {ShowPreview && <Image source={{uri:image}} style={{width:300,height:200,backgroundColor:"red",flex:1,marginLeft:30}}/>}

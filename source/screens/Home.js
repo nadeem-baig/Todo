@@ -10,12 +10,7 @@ const wait = (timeout) => {
 const Home = ({navigation}) => {
   const[Data,setData]=useState([])
   const[AllData,setAllData]=useState([])
-//   <Button
-//   onPress={()=>(onRefresh(),setRefreshing(true)) }
-//   title="Learn More"
-//   color="#841584"
-//   accessibilityLabel="Learn more about this purple button"
-// />
+
   useLayoutEffect(() => {
     getData().then ((value) => {
       setData(value)  
@@ -94,12 +89,11 @@ const Home = ({navigation}) => {
         {
 Data.map((source,key) => (
   <TouchableOpacity key={key} onPress={()=>navigation.navigate("Details",{data:source})}  onLongPress={()=>ThreeButtonAlert(key)} >
-  <View style={{flexDirection:"row",marginTop:15,marginBottom:0,backgroundColor:"white",margin:15,borderRadius:10}} >
+  <View style={{flexDirection:"row",marginTop:15,marginBottom:0,backgroundColor:"white",margin:15,borderRadius:10,padding:5}} >
 
-        <Image source={{uri:source.image}} style={{height:80,width:100,resizeMode:'contain',marginLeft:20,
-}} />
+        <Image source={{uri:source.image}} style={{height:80,width:100,resizeMode:'contain',marginLeft:20,borderRadius:10}} />
 
-        <View style={{width:"100%",height:50,paddingLeft:20, justifyContent:'center'}}>
+        <View style={{width:"100%",height:50,paddingLeft:20, justifyContent:'center',alignSelf:'center'}}>
             <Text style={{fontWeight:"bold",fontWeight:"700",fontSize:20}}>Name: {source.name}</Text>
             <Text style={{fontWeight:"bold",fontWeight:"700",fontSize:20}}>Address: {source.address}</Text>
             
